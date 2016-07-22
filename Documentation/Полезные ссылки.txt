@@ -1,0 +1,4 @@
+http://docwiki.embarcadero.com/RADStudio/XE8/en/Connect_to_MySQL_Server_(FireDAC)
+http://ns2d.ru/articles/delphi/podklyuchenie-mysql-v-delphi-7-chast-2
+http://www.sql.ru/forum/903422-1/mysql-i-delphi
+http://digital-flame.ru/2015/08/10/mysql-i-delphi-podklyuchenie-k-serveru-mysql/
