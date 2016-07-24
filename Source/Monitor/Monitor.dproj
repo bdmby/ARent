@@ -126,6 +126,15 @@
         <DCCReference Include="Monitor_MainForm.pas">
             <Form>ARentMainForm</Form>
         </DCCReference>
+        <DCCReference Include="..\System\System_DBUnit.pas">
+            <Form>DBDataModule</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="..\System\System_LoginUnit.pas">
+            <Form>System_LoginForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

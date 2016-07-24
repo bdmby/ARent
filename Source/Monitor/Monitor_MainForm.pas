@@ -10,7 +10,7 @@ uses
   FireDAC.Phys, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef, FireDAC.VCLUI.Wait,
   FireDAC.Comp.Client, Vcl.ComCtrls, IdBaseComponent, IdUserPassProvider,
   RxPlacemnt, RxTranslate, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
-  FireDAC.DApt, FireDAC.Comp.DataSet;
+  FireDAC.DApt, FireDAC.Comp.DataSet, System_DBUnit, System_LoginUnit;
 
 type
   TARentMainForm = class(TForm)
@@ -35,60 +35,30 @@ implementation
 procedure TARentMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   FDMainConnection.Connected := false;
+
+  FreeAndNil(DBDataModule);
 end;
 
 procedure TARentMainForm.FormCreate(Sender: TObject);
 var
-  vFDQuery: TFDQuery;
+  vConnect: boolean;
   s: string;
-  vPassword: string;
-  vUserName: string;
-  vDatabase: string;
-  vServer: string;
-  vPort: string;
 begin
-   // Определение параметров подключения к БД
-   vPassword := 'myc25ce2Ph6sql';
-   vUserName := 'root';
-   vDatabase := '';
-   vServer := 'localhost';
-   vPort := '3306';
+   DBDataModule := TDBDataModule.Create(Self);
 
+   System_LoginForm := TSystem_loginForm.Create(Self);
    // Стартовое подключение к БД
-   FDMainConnection.Params.Clear;
-   FDMainConnection.Params.Add('DriverID=MySQL');
-   FDMainConnection.Params.Add('CharacterSet=utf8');
-   FDMainConnection.Params.Add('Password=' + vPassword);
-   FDMainConnection.Params.Add('Server=' + vServer);
-   FDMainConnection.Params.Add('User_Name=' + vUserName);
-   FDMainConnection.Params.Add('Port=' + vPort);
+   vConnect := (System_LoginForm.ModalResult = mrOk);
+   FreeAndNil(System_LoginForm);
 
-   try
-     FDMainConnection.Connected := true;
-   except
-     ShowMessage('Ошибка подключения');
+   if vConnect then begin
+     // Выввод сведений о подключении
+     s := 'Подключено ' + DBDataModule.UserName + '@' + DBDataModule.Database;
+   end else begin
+     s := 'Нет подключения';
    end;
 
-   // Выввод сведений о подключении
-   MainStatusBar.Panels[0].Text := 'Подключено ' + vUserName + '@' + vDatabase;
-
-   vFDQuery:= TFDQuery.Create(Self);
-   try
-     // Получение списка баз данных на сервере
-     vFDQuery.Connection:= FDMainConnection;
-     vFDQuery.SQL.Text := 'SELECT schema_name FROM information_schema.schemata';
-     vFDQuery.Active := true;
-
-     vFDQuery.First;
-     while (not vFDQuery.Eof) do begin
-       s:= vFDQuery.FieldByName('schema_name').AsString;
-       vFDQuery.Next;
-     end;
-
-     vFDQuery.Active := false;
-   finally
-     FreeAndNil(vFDQuery);
-   end;
+   MainStatusBar.Panels[0].Text := s;
 end;
 
 end.

@@ -33,8 +33,8 @@ object ARentMainForm: TARentMainForm
       'DriverID=MySQL'
       'CharacterSet=utf8')
     LoginPrompt = False
-    Left = 40
-    Top = 32
+    Left = 64
+    Top = 96
   end
   object MainFormStorage: TFormStorage
     UseRegistry = True
